@@ -3,7 +3,7 @@ using UnityEngine.Pool;
 
 public class GameObjectPool : MonoBehaviour
 {
-    public IObjectPool<GameObject> Pool
+    public IObjectPool<GameObject> ObjectPool
     {
         get
         {
@@ -13,12 +13,19 @@ public class GameObjectPool : MonoBehaviour
     }
     private IObjectPool<GameObject> _pool;
     private IObjectMovable _objectMovable;
+    [SerializeField] private CutObjectPool cutObjectPool;
     [SerializeField] private GameObject spawnObject;
     public int maxPoolSize = 10;
     
     GameObject CreatePooledItem()
     {
-        return Instantiate(spawnObject, transform);
+        GameObject go = Instantiate(spawnObject, transform);
+        ObjectEffect effect = go.GetComponentInChildren<ObjectEffect>();
+        effect.ObjectPool = ObjectPool;
+        effect.CutPool = cutObjectPool.CutPool;
+        TimeReleaser releaser = go.GetComponent<TimeReleaser>();
+        releaser.ReturnPool = ObjectPool;
+        return go;
     }
     
     void OnReturnedToPool(GameObject go)
