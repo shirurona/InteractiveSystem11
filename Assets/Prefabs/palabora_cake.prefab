@@ -10,10 +10,12 @@ GameObject:
   m_Component:
   - component: {fileID: 1599375143915720026}
   - component: {fileID: 6279469796772648644}
-  - component: {fileID: 4436263412469590050}
+  - component: {fileID: 1340890112905609170}
   - component: {fileID: 286457220804164355}
+  - component: {fileID: -3178762885363531068}
+  - component: {fileID: 652297828160088509}
   m_Layer: 0
-  m_Name: cake
+  m_Name: palabora_cake
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,8 +49,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05bfa7d235d3294e9f369089742ecf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectMovable: {fileID: 4436263412469590050}
---- !u!114 &4436263412469590050
+  objectMovable: {fileID: 1340890112905609170}
+--- !u!114 &1340890112905609170
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -57,12 +59,13 @@ MonoBehaviour:
   m_GameObject: {fileID: 4292955570771255841}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3ce4b734a981b7a4dba1f26c5db462b2, type: 3}
+  m_Script: {fileID: 11500000, guid: 4cc3894422e84884a9239d5de62ef397, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  distance: 1
+  distance: 0.1
+  startPosition: {x: 0, y: 0, z: 0}
   targetPosition: {x: 0, y: 0.3, z: 0}
-  speed: 1
+  power: 1
 --- !u!114 &286457220804164355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -75,7 +78,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54392cef350f22840ad5d686ccabea15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteTime: 2
+  deleteTime: 5
+--- !u!54 &-3178762885363531068
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4292955570771255841}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 0
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
+--- !u!114 &652297828160088509
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4292955570771255841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33cccd7c5c17b1f4289fd5f1915394fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  localGravity: {x: 0, y: -1.2, z: 0}
 --- !u!1 &7597822209670056373
 GameObject:
   m_ObjectHideFlags: 0
@@ -177,7 +220,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   divideDistance: 0.001
-  dividePower: 0.01
+  dividePower: 0.5
 --- !u!135 &5644449045585380522
 SphereCollider:
   m_ObjectHideFlags: 0

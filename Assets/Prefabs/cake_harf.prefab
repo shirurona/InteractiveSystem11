@@ -60,7 +60,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 33cccd7c5c17b1f4289fd5f1915394fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  localGravity: {x: 0, y: -0.1, z: 0}
+  localGravity: {x: 0, y: -1, z: 0}
 --- !u!54 &8830637674065102898
 Rigidbody:
   m_ObjectHideFlags: 0
