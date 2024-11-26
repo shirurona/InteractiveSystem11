@@ -4444,7 +4444,7 @@ PrefabInstance:
     - target: {fileID: 1234652847329689333, guid: 710c6a51e481b5a419c8c7a3eae1bada, type: 3}
       propertyPath: _inputProvider
       value: 
-      objectReference: {fileID: 2095032044}
+      objectReference: {fileID: 1682346236}
     - target: {fileID: 5481279275633608576, guid: 710c6a51e481b5a419c8c7a3eae1bada, type: 3}
       propertyPath: m_Name
       value: Physical Hands Manager
@@ -4458,7 +4458,7 @@ PrefabInstance:
     m_AddedGameObjects:
     - targetCorrespondingSourceObject: {fileID: 1234652847329689332, guid: 710c6a51e481b5a419c8c7a3eae1bada, type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1496428154}
+      addedObject: {fileID: 1566959611}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 710c6a51e481b5a419c8c7a3eae1bada, type: 3}
 --- !u!1 &704763305
@@ -5170,7 +5170,7 @@ Transform:
   m_GameObject: {fileID: 934240696}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: -1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -5564,7 +5564,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cuttedObject: {fileID: 1873048277696933788, guid: 820bf22b8cbb23c4d9f240ed5b449285, type: 3}
   maxPoolSize: 10
---- !u!1 &1496428153
+--- !u!1 &1566959610
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -5572,8 +5572,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1496428154}
-  - component: {fileID: 1496428155}
+  - component: {fileID: 1566959611}
+  - component: {fileID: 1566959612}
   m_Layer: 0
   m_Name: HardContact
   m_TagString: Untagged
@@ -5581,28 +5581,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &1496428154
+--- !u!4 &1566959611
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496428153}
+  m_GameObject: {fileID: 1566959610}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.12070453, y: -0.16915119, z: 0.09717836}
+  m_LocalRotation: {x: 0.15488556, y: -0, z: -0, w: 0.98793244}
+  m_LocalPosition: {x: -0.12070453, y: -0.19077525, z: 0.04075}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 2095032045}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1496428155
+--- !u!114 &1566959612
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1496428153}
+  m_GameObject: {fileID: 1566959610}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 751b0fa5afa099c43854eca01d767798, type: 3}
@@ -5708,10 +5708,10 @@ SceneRoots:
   - {fileID: 992299340}
   - {fileID: 883355398}
   - {fileID: 1254324192}
+  - {fileID: 750657590}
   - {fileID: 70394494}
   - {fileID: 408528270}
   - {fileID: 704763307}
-  - {fileID: 750657590}
   - {fileID: 1705216733}
   - {fileID: 370294000}
   - {fileID: 934240698}
