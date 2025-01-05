@@ -9,11 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1599375143915720026}
+  - component: {fileID: 6264683142508788857}
   - component: {fileID: 6279469796772648644}
-  - component: {fileID: 1340890112905609170}
   - component: {fileID: 286457220804164355}
   - component: {fileID: -3178762885363531068}
-  - component: {fileID: 652297828160088509}
   m_Layer: 0
   m_Name: palabora_cake
   m_TagString: Untagged
@@ -37,6 +36,24 @@ Transform:
   - {fileID: 3437474586283013470}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6264683142508788857
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4292955570771255841}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22917f63d51c1a143a268d0b15eb7f5f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  distance: 5
+  spawnRange: {x: 0, y: 0}
+  spawnPositionCenter: {x: 0, y: 0.3}
+  targetRange: {x: 0.3, y: 0.15}
+  targetPositionCenter: {x: 0, y: 0.3, z: 0}
+  arriveTime: 2
 --- !u!114 &6279469796772648644
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -49,23 +66,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e05bfa7d235d3294e9f369089742ecf6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  objectMovable: {fileID: 1340890112905609170}
---- !u!114 &1340890112905609170
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4292955570771255841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4cc3894422e84884a9239d5de62ef397, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  distance: 0.1
-  startPosition: {x: 0, y: 0, z: 0}
-  targetPosition: {x: 0, y: 0.3, z: 0}
-  power: 1
+  objectMovable: {fileID: 6264683142508788857}
 --- !u!114 &286457220804164355
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -78,7 +79,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 54392cef350f22840ad5d686ccabea15, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  deleteTime: 5
+  deleteTime: 2.1
 --- !u!54 &-3178762885363531068
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -106,19 +107,6 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 0
   m_CollisionDetection: 0
---- !u!114 &652297828160088509
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4292955570771255841}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 33cccd7c5c17b1f4289fd5f1915394fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  localGravity: {x: 0, y: -1.2, z: 0}
 --- !u!1 &7597822209670056373
 GameObject:
   m_ObjectHideFlags: 0

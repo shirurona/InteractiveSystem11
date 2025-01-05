@@ -4,20 +4,21 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObjectPool pool;
+    [SerializeField] private float[] intervalTime;
 
-    [SerializeField] private float intervalTime = 1f;
-    [SerializeField] private float deleteTime = 2f;
-
-    private float time = 0f;
+    private float _time = 0f;
+    private int _count = 0;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Update()
     {
-        if (time > intervalTime)
+        int intervalIndex = Mathf.Min(_count, intervalTime.Length - 1);
+        if (_time > intervalTime[intervalIndex])
         {
-            time -= intervalTime;
+            _time -= intervalTime[intervalIndex];
             pool.ObjectPool.Get();
+            _count++;
         }
-        time += Time.deltaTime;
+        _time += Time.deltaTime;
     }
 }

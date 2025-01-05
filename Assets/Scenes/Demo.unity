@@ -4794,8 +4794,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   pool: {fileID: 1254324189}
-  intervalTime: 1
-  deleteTime: 2
+  intervalTime:
+  - 5
+  - 4
+  - 3
+  - 2
+  - 1
+  - 1
+  - 1
+  - 1
+  - 1
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.5
+  - 0.3
 --- !u!4 &1254324192
 Transform:
   m_ObjectHideFlags: 0
