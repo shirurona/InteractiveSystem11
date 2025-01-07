@@ -1,3 +1,4 @@
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -25,42 +26,51 @@ public class GameObjectPool : MonoBehaviour
     {
         GameObject go = Instantiate(spawnObject, transform);
         ObjectEffect effect = go.GetComponentInChildren<ObjectEffect>();
-        InitObjectEffect(effect);
+        effect.ObjectPool = ObjectPool;
+        effect.CutPool = cutObjectPool.CutPool;
         TimeReleaser releaser = go.GetComponent<TimeReleaser>();
-        InitTimeReleaser(releaser);
+        releaser.ReturnPool = ObjectPool;
         return go;
     }
 
-    void InitObjectEffect(ObjectEffect effect)
+    void InitObject(GameObject go)
     {
-        effect.ObjectPool = ObjectPool;
-        effect.CutPool = cutObjectPool.CutPool;
-        var ct = this.GetCancellationTokenOnDestroy();
+        var dct = go.GetCancellationTokenOnDestroy();
+        ObjectCancel cancel = go.GetComponent<ObjectCancel>();
+        var cts = CancellationTokenSource.CreateLinkedTokenSource(dct, cancel.GetToken());
+        ObjectEffect effect = go.GetComponentInChildren<ObjectEffect>();
+        InitObjectEffect(effect, cts.Token);
+        TimeReleaser releaser = go.GetComponent<TimeReleaser>();
+        InitTimeReleaser(releaser, cts.Token);
+    }
+
+    void InitObjectEffect(ObjectEffect effect, CancellationToken cts)
+    {
         UniTask.Void(async () =>
         {
-            await effect.OnObjectCutAsync(ct);
+            await effect.OnObjectCutAsync(cts);
             score.OnCut();
         });
     }
 
-    void InitTimeReleaser(TimeReleaser releaser)
+    void InitTimeReleaser(TimeReleaser releaser, CancellationToken cts)
     {
-        releaser.ReturnPool = ObjectPool;
-        var ct = this.GetCancellationTokenOnDestroy();
         UniTask.Void(async () =>
         {
-            await releaser.OnReleaseAsync(ct);
+            await releaser.OnReleaseAsync(cts);
             health.OnHitDamage();
         });
     }
     
     void OnReturnedToPool(GameObject go)
     {
+        go.GetComponent<ObjectCancel>().TryCancel();
         go.SetActive(false);
     }
     
     void OnTakeFromPool(GameObject go)
     {
+        InitObject(go);
         go.SetActive(true);
     }
     
