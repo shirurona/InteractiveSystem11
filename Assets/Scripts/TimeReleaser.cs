@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -6,24 +8,9 @@ public class TimeReleaser : MonoBehaviour
 {
     [SerializeField] private float deleteTime = 2f;
     public IObjectPool<GameObject> ReturnPool { get; set; }
-    private bool once = false;
-    private float time = 0f;
-
-    private void OnEnable()
+    public async UniTask OnReleaseAsync(CancellationToken ct)
     {
-        once = false;
-        time = 0f;
-    }
-
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Update()
-    {
-        if (once) return;
-        if (time > deleteTime)
-        {
-            once = true;
-            ReturnPool.Release(gameObject);
-        }
-        time += Time.deltaTime;
+        await UniTask.Delay(TimeSpan.FromSeconds(deleteTime), cancellationToken: ct);
+        ReturnPool.Release(gameObject);
     }
 }

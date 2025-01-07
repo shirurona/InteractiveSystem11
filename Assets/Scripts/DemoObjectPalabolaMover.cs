@@ -9,7 +9,7 @@ public class ParabolaDemoObjectMover : MonoBehaviour, IObjectMovable
     [SerializeField] private float distance = 5f;
     [SerializeField] private Vector3 startPosition = Vector3.zero;
     [SerializeField] private Vector3 targetPosition = Vector3.zero;
-    [FormerlySerializedAs("speed")] [SerializeField] private float power = 1f;
+    [SerializeField] private float power = 1f;
     
     public void ChangeSpawnPosition(Transform target)
     {

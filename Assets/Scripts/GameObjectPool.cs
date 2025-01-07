@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -15,17 +17,41 @@ public class GameObjectPool : MonoBehaviour
     private IObjectMovable _objectMovable;
     [SerializeField] private CutObjectPool cutObjectPool;
     [SerializeField] private GameObject spawnObject;
+    [SerializeField] private HealthModel health;
+    [SerializeField] private ScoreModel score;
     public int maxPoolSize = 10;
     
     GameObject CreatePooledItem()
     {
         GameObject go = Instantiate(spawnObject, transform);
         ObjectEffect effect = go.GetComponentInChildren<ObjectEffect>();
+        InitObjectEffect(effect);
+        TimeReleaser releaser = go.GetComponent<TimeReleaser>();
+        InitTimeReleaser(releaser);
+        return go;
+    }
+
+    void InitObjectEffect(ObjectEffect effect)
+    {
         effect.ObjectPool = ObjectPool;
         effect.CutPool = cutObjectPool.CutPool;
-        TimeReleaser releaser = go.GetComponent<TimeReleaser>();
+        var ct = this.GetCancellationTokenOnDestroy();
+        UniTask.Void(async () =>
+        {
+            await effect.OnObjectCutAsync(ct);
+            score.OnCut();
+        });
+    }
+
+    void InitTimeReleaser(TimeReleaser releaser)
+    {
         releaser.ReturnPool = ObjectPool;
-        return go;
+        var ct = this.GetCancellationTokenOnDestroy();
+        UniTask.Void(async () =>
+        {
+            await releaser.OnReleaseAsync(ct);
+            health.OnHitDamage();
+        });
     }
     
     void OnReturnedToPool(GameObject go)

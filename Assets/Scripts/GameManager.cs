@@ -4,6 +4,7 @@ using UnityEngine;
 public class GameManager : MonoBehaviour
 {
     [SerializeField] private GameObjectPool pool;
+    [SerializeField] private HealthModel model;
     [SerializeField] private float[] intervalTime;
 
     private float _time = 0f;

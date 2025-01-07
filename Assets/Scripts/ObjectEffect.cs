@@ -1,4 +1,7 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using Cysharp.Threading.Tasks.Triggers;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -8,18 +11,10 @@ public class ObjectEffect : MonoBehaviour
     public IObjectPool<GameObject> CutPool { get; set; }
     public float divideDistance = 0.001f;
     public float dividePower = 0.01f;
-    private bool once = false;
-
-    private void OnEnable()
+    
+    public async UniTask OnObjectCutAsync(CancellationToken ct)
     {
-        once = false;
-    }
-
-    private void OnTriggerEnter(Collider other)
-    {
-        if (once) return;
-        once = true;
-        
+        await this.GetAsyncTriggerEnterTrigger().OnTriggerEnterAsync(ct);
         AppearLeftObject();
         AppearRightObject();
         ObjectPool.Release(transform.parent.gameObject);
