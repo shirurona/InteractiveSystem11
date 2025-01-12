@@ -3,6 +3,7 @@ using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 using UnityEngine.Pool;
+using UnityEngine.UI;
 
 public class GameObjectPool : MonoBehaviour
 {
@@ -20,6 +21,10 @@ public class GameObjectPool : MonoBehaviour
     [SerializeField] private GameObject spawnObject;
     [SerializeField] private HealthModel health;
     [SerializeField] private ScoreModel score;
+
+    [SerializeField] private Transform parent;
+    [SerializeField] private Camera camera;
+    [SerializeField] private Image ink;
     public int maxPoolSize = 10;
     
     GameObject CreatePooledItem()
@@ -35,6 +40,7 @@ public class GameObjectPool : MonoBehaviour
 
     void InitObject(GameObject go)
     {
+        AudioManager.Instance.PlaySE("appear");
         var dct = go.GetCancellationTokenOnDestroy();
         ObjectCancel cancel = go.GetComponent<ObjectCancel>();
         var cts = CancellationTokenSource.CreateLinkedTokenSource(dct, cancel.GetToken());
@@ -58,6 +64,9 @@ public class GameObjectPool : MonoBehaviour
         UniTask.Void(async () =>
         {
             await releaser.OnReleaseAsync(cts);
+            AudioManager.Instance.PlaySE("damage");
+            Vector3 screenPoint = camera.WorldToScreenPoint(releaser.transform.position);
+            Instantiate(ink, screenPoint, Quaternion.identity, parent);
             health.OnHitDamage();
         });
     }

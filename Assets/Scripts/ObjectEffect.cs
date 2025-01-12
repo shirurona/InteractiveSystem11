@@ -15,6 +15,7 @@ public class ObjectEffect : MonoBehaviour
     public async UniTask OnObjectCutAsync(CancellationToken ct)
     {
         await this.GetAsyncTriggerEnterTrigger().OnTriggerEnterAsync(ct);
+        AudioManager.Instance.PlaySE("cut");
         AppearLeftObject();
         AppearRightObject();
         ObjectPool.Release(transform.parent.gameObject);

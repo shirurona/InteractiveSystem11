@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using UnityEngine;
 
@@ -9,7 +10,12 @@ public class GameManager : MonoBehaviour
 
     private float _time = 0f;
     private int _count = 0;
-    
+
+    private void Start()
+    {
+        AudioManager.Instance.PlayBGM("bgm", 0.2f);
+    }
+
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Update()
     {
