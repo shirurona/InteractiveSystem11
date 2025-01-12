@@ -1,6 +1,5 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
-using R3;
 using UnityEngine;
 using UnityEngine.Pool;
 using UnityEngine.UI;
@@ -26,6 +25,7 @@ public class GameObjectPool : MonoBehaviour
     [SerializeField] private Camera camera;
     [SerializeField] private Image ink;
     public int maxPoolSize = 10;
+    private readonly float[] _hitScale = new float[] { 1, 1.5f, 2f };
     
     GameObject CreatePooledItem()
     {
@@ -65,9 +65,11 @@ public class GameObjectPool : MonoBehaviour
         {
             await releaser.OnReleaseAsync(cts);
             AudioManager.Instance.PlaySE("damage");
-            Vector3 screenPoint = camera.WorldToScreenPoint(releaser.transform.position);
-            Instantiate(ink, screenPoint, Quaternion.identity, parent);
             health.OnHitDamage();
+            Vector3 screenPoint = camera.WorldToScreenPoint(releaser.transform.position);
+            Image obj = Instantiate(ink, screenPoint, Quaternion.identity, parent);
+            int hitIndex = 2 - health.HitPoint.CurrentValue;
+            obj.transform.localScale = Vector3.one * _hitScale[hitIndex];
         });
     }
     

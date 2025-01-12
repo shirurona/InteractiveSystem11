@@ -35,6 +35,7 @@ public class ObjectEffect : MonoBehaviour
     {
         Transform right = CutPool.Get().transform;
         right.position = transform.parent.position + Vector3.right * divideDistance;
+        right.rotation = Quaternion.Euler(0,0,0);
         Rigidbody rb = right.GetComponent<Rigidbody>();
         rb.linearVelocity = Vector3.zero;
         rb.AddForce(Vector3.right * dividePower, ForceMode.Impulse);

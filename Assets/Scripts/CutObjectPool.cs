@@ -1,4 +1,6 @@
 using System;
+using System.Threading;
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -20,8 +22,15 @@ public class CutObjectPool : MonoBehaviour
     GameObject CreateCuttedItem()
     {
         GameObject go = Instantiate(cuttedObject, transform);
-        go.GetComponent<TimeReleaser>().ReturnPool = CutPool;
+        TimeReleaser timeReleaser = go.GetComponent<TimeReleaser>();
+        timeReleaser.ReturnPool = CutPool;
         return go;
+    }
+    
+    void InitTimeReleaser(TimeReleaser releaser)
+    {
+        var dct = releaser.GetCancellationTokenOnDestroy();
+        releaser.OnReleaseAsync(dct).Forget();
     }
     
     void OnReturnedToPool(GameObject go)
@@ -31,6 +40,8 @@ public class CutObjectPool : MonoBehaviour
 
     void OnTakeFromPool(GameObject go)
     {
+        TimeReleaser timeReleaser = go.GetComponent<TimeReleaser>();
+        InitTimeReleaser(timeReleaser);
         go.SetActive(true);
     }
     

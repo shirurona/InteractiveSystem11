@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
 
@@ -18,7 +19,7 @@ public class HealthPresenter : MonoBehaviour
                 view.DamageEffect();
                 if (x == 0)
                 {
-                    gameOver.OnGameOver().Forget();
+                    gameOver.OnGameOver(this.GetCancellationTokenOnDestroy()).Forget();
                 }
             })
             .AddTo(this);

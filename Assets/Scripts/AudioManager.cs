@@ -29,12 +29,6 @@ public class AudioManager : DontDestroySingleton<AudioManager>
         int bgmIndex = _BGMTable[BGMName];
         AudioClip bgmClip = audioClipsBGM[bgmIndex];
 
-        // 同じBGMを再生している場合は何もしない
-        if (audioSourceBGM.clip == bgmClip)
-        {
-            return;
-        }
-
         // BGMを設定して再生
         audioSourceBGM.clip = bgmClip;
         audioSourceBGM.volume = volume;
