@@ -16,7 +16,7 @@ public class ScorePresenter : MonoBehaviour
 
     void ShowScore(int scorePoint)
     {
-        string showText = $"SCORE:{scorePoint}";
+        string showText = $"スコア:{scorePoint}";
         view.ShowScore(showText);
     }
 }
