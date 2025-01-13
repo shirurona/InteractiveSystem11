@@ -13,6 +13,9 @@
 /[Ss]erver[Dd]ata/
 /[Aa]ssets/[Pp]ackages/
 /[Aa]ssets/[Oo]thers/[Ff]onts/
+/[Aa]ssets/[Ll]icensedAssets/
+WebGL Builds/
+connectwebgl.zip
 
 # MemoryCaptures can get excessive in size.
 # They also could contain extremely sensitive data

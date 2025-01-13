@@ -7,6 +7,7 @@ public class HealthPresenter : MonoBehaviour
     [SerializeField] private HealthModel model;
     [SerializeField] private HealthView view;
     [SerializeField] private GameOver gameOver;
+    [SerializeField] private DamageEffect damageEffect;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
@@ -16,7 +17,7 @@ public class HealthPresenter : MonoBehaviour
             .Subscribe(x =>
             {
                 view.ShowHearts(x);
-                view.DamageEffect();
+                damageEffect.PlayEffect();
                 if (x == 0)
                 {
                     gameOver.OnGameOver(this.GetCancellationTokenOnDestroy()).Forget();

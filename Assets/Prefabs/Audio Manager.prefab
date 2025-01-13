@@ -49,6 +49,7 @@ MonoBehaviour:
   audioSourceBGM: {fileID: 2976032760123702389}
   audioClipsBGM:
   - {fileID: 8300000, guid: f04a38e657063d04a96b1fd6c37cdd22, type: 3}
+  - {fileID: 8300000, guid: 874264748d8a6604ab36a6c02c69bb77, type: 3}
   audioSourceSE: {fileID: 6942791924331953428}
   audioClipsSE:
   - {fileID: 8300000, guid: 39e103fac6e7afa4fa4c53fe86c8de32, type: 3}
@@ -71,7 +72,7 @@ AudioSource:
   m_PlayOnAwake: 1
   m_Volume: 1
   m_Pitch: 1
-  Loop: 0
+  Loop: 1
   Mute: 0
   Spatialize: 0
   SpatializePostEffects: 0
