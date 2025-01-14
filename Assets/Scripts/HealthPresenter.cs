@@ -7,7 +7,6 @@ public class HealthPresenter : MonoBehaviour
 {
     [SerializeField] private HealthModel model;
     [SerializeField] private HealthView view;
-    [SerializeField] private GameOver gameOver;
     [SerializeField] private DamageEffect damageEffect;
     [SerializeField] private GameObjectPool objectHitModel;
 
@@ -29,7 +28,7 @@ public class HealthPresenter : MonoBehaviour
                 damageEffect.HitDecal(x.Item1, x.Item2);
                 if (x.Item1 == 0)
                 {
-                    gameOver.OnGameOver(this.GetCancellationTokenOnDestroy()).Forget();
+                    damageEffect.OnGameOver(this.GetCancellationTokenOnDestroy()).Forget();
                 }
             });
     }
