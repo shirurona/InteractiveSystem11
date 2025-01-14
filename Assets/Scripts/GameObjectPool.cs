@@ -1,8 +1,8 @@
 using System.Threading;
 using Cysharp.Threading.Tasks;
+using R3;
 using UnityEngine;
 using UnityEngine.Pool;
-using UnityEngine.UI;
 
 public class GameObjectPool : MonoBehaviour
 {
@@ -18,14 +18,11 @@ public class GameObjectPool : MonoBehaviour
     private IObjectMovable _objectMovable;
     [SerializeField] private CutObjectPool cutObjectPool;
     [SerializeField] private GameObject spawnObject;
-    [SerializeField] private HealthModel health;
-    [SerializeField] private ScoreModel score;
-
-    [SerializeField] private Transform parent;
-    [SerializeField] private Camera camera;
-    [SerializeField] private Image ink;
+    public Observable<Vector3> OnHit => _onHit;
+    private Subject<Vector3> _onHit = new Subject<Vector3>();
+    public Observable<Unit> OnCut => _onCut;
+    private Subject<Unit> _onCut = new Subject<Unit>();
     public int maxPoolSize = 10;
-    private readonly float[] _hitScale = new float[] { 1, 1.5f, 2f };
     
     GameObject CreatePooledItem()
     {
@@ -55,7 +52,7 @@ public class GameObjectPool : MonoBehaviour
         UniTask.Void(async () =>
         {
             await effect.OnObjectCutAsync(cts);
-            score.OnCut();
+            _onCut.OnNext(Unit.Default);
         });
     }
 
@@ -64,12 +61,7 @@ public class GameObjectPool : MonoBehaviour
         UniTask.Void(async () =>
         {
             await releaser.OnReleaseAsync(cts);
-            AudioManager.Instance.PlaySE("damage");
-            health.OnHitDamage();
-            Vector3 screenPoint = camera.WorldToScreenPoint(releaser.transform.position);
-            Image obj = Instantiate(ink, screenPoint, Quaternion.identity, parent);
-            int hitIndex = 2 - health.HitPoint.CurrentValue;
-            obj.transform.localScale = Vector3.one * _hitScale[hitIndex];
+            _onHit.OnNext(releaser.transform.position);
         });
     }
     

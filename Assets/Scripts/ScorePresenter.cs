@@ -5,10 +5,14 @@ public class ScorePresenter : MonoBehaviour
 {
     [SerializeField] private ScoreModel model;
     [SerializeField] private ScoreView view;
+    [SerializeField] private GameObjectPool objectCutModel;
     
     // Start is called once before the first execution of Update after the MonoBehaviour is created
     void Start()
     {
+        objectCutModel.OnCut
+            .Subscribe(_ => model.OnCut());
+        
         model.ScorePoint
             .Subscribe(ShowScore)
             .AddTo(this);

@@ -4835,6 +4835,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5a20bb0eae8779a4da21be65c80d03d2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 571724436}
+  myCamera: {fileID: 992299339}
+  ink: {fileID: 3319383040613462657, guid: c94889fe36e8b5843a933f2fa92558b1, type: 3}
   damageEffect: {fileID: 80759627}
   impulseSource: {fileID: 262860954}
   force: 10
@@ -6212,6 +6215,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   model: {fileID: 1254324195}
   view: {fileID: 1100678846}
+  objectCutModel: {fileID: 1254324189}
 --- !u!114 &1100678846
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -6487,11 +6491,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   cutObjectPool: {fileID: 1254324193}
   spawnObject: {fileID: 4292955570771255841, guid: 4d9884520c9fcfb4fb4f93f023b1b46e, type: 3}
-  health: {fileID: 1254324194}
-  score: {fileID: 1254324195}
-  parent: {fileID: 571724436}
-  camera: {fileID: 992299339}
-  ink: {fileID: 3319383040613462657, guid: c94889fe36e8b5843a933f2fa92558b1, type: 3}
   maxPoolSize: 10
 --- !u!114 &1254324190
 MonoBehaviour:
@@ -6998,6 +6997,8 @@ MonoBehaviour:
   view: {fileID: 1608442606}
   gameOver: {fileID: 1551777812}
   damageEffect: {fileID: 80759630}
+  objectHitModel: {fileID: 1254324189}
+  noDamageSeconds: 1.5
 --- !u!114 &1608442606
 MonoBehaviour:
   m_ObjectHideFlags: 0
