@@ -5,8 +5,7 @@ using UnityEngine;
 public class ScoreModel : ScriptableObject
 {
     public ReadOnlyReactiveProperty<int> ScorePoint => _score;
-
-    private ReactiveProperty<int> _score = new ReactiveProperty<int>(0);
+    [SerializeField] private SerializableReactiveProperty<int> _score = new SerializableReactiveProperty<int>(0);
 
     public void Reset()
     {

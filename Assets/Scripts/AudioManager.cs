@@ -14,6 +14,11 @@ public class AudioManager : DontDestroySingleton<AudioManager>
     public override void Awake()
     {
         base.Awake();
+        if (IsAudioSourceNull(audioSourceBGM) || IsAudioSourceNull(audioSourceSE))
+        {
+            return;
+        }
+        
         for (int i = 0; i < audioClipsBGM.Length; i++)
         {
             _BGMTable.Add(audioClipsBGM[i].name, i);
@@ -26,6 +31,11 @@ public class AudioManager : DontDestroySingleton<AudioManager>
 
     public void PlayBGM(string BGMName, float volume = 1f)
     {
+        if (IsAudioSourceNull(audioSourceBGM))
+        {
+            return;
+        }
+        
         int bgmIndex = _BGMTable[BGMName];
         AudioClip bgmClip = audioClipsBGM[bgmIndex];
 
@@ -37,11 +47,21 @@ public class AudioManager : DontDestroySingleton<AudioManager>
 
     public void StopBGM()
     {
+        if (IsAudioSourceNull(audioSourceBGM))
+        {
+            return;
+        }
+        
         audioSourceBGM.Stop();
     }
     
     public void PlaySE(string SEName, float volume = 1f)
     {
+        if (IsAudioSourceNull(audioSourceSE))
+        {
+            return;
+        }
+        
         int seIndex = _SETable[SEName];
         AudioClip seClip = audioClipsSE[seIndex];
         audioSourceSE.PlayOneShot(seClip, volume);
@@ -49,6 +69,24 @@ public class AudioManager : DontDestroySingleton<AudioManager>
 
     public void StopSE()
     {
+        if (IsAudioSourceNull(audioSourceSE))
+        {
+            return;
+        }
+        
         audioSourceSE.Stop();
+    }
+    
+    /// <summary>
+    /// デバッグ用にnullを防ぐ
+    /// </summary>
+    private bool IsAudioSourceNull(AudioSource audioSource)
+    {
+        bool isNull = audioSource == null;
+        if (isNull)
+        {
+            Debug.LogWarning("audio source is null");
+        }
+        return isNull;
     }
 }
