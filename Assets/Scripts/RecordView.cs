@@ -1,5 +1,5 @@
+using Cysharp.Threading.Tasks;
 using TMPro;
-using UnityEditor.Animations;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -27,11 +27,14 @@ public class RecordView : MonoBehaviour
     {
         rankText.color = Colors[rankIndex];
         rankText.text = RankStr[rankIndex];
-        if (record.Name is null)
+        if (record.IsRecordNameNull())
         {
             nameText.text = string.Empty;
-            animator.Play(HighlightAnimationHash);
-            Debug.Log("play");
+            UniTask.Void(async () =>
+            {
+                await UniTask.WaitUntil(() => animator.isActiveAndEnabled);
+                animator.Play(HighlightAnimationHash);
+            });
         }
         else
         {
