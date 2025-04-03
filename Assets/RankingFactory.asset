@@ -9,8 +9,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fc2d29072e99d0e4aa4790faa064aac1, type: 3}
-  m_Name: Score
+  m_Script: {fileID: 11500000, guid: 21b50fb2276d86f47ba14e9b1ad5e1bc, type: 3}
+  m_Name: RankingFactory
   m_EditorClassIdentifier: 
-  _score:
-    value: 999
+  databaseName: local_ranking.db
+  checkUrl: http://192.168.210.105/
+  timeOutSeconds: 2

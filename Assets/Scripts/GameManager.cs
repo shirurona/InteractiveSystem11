@@ -4,16 +4,19 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour
 {
+    [SerializeField] private Animator transitionAnimator;
     [SerializeField] private GameObjectPool pool;
     [SerializeField] private HealthModel model;
     [SerializeField] private float[] intervalTime;
-
+    
+    private static readonly int BlackInAnimationHash = Animator.StringToHash("BlackIn");
     private float _time = 0f;
     private int _count = 0;
 
     private void Start()
     {
         AudioManager.Instance.PlayBGM("bgm", 0.2f);
+        transitionAnimator.Play(BlackInAnimationHash);
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

@@ -1,7 +1,7 @@
 using R3;
 using UnityEngine;
 
-[CreateAssetMenu(menuName = "ScriptableObjects/Score")]
+[CreateAssetMenu(menuName = "Scriptable Objects/Score")]
 public class ScoreModel : ScriptableObject
 {
     public ReadOnlyReactiveProperty<int> ScorePoint => _score;

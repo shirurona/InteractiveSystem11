@@ -9,6 +9,10 @@ public class ServerRanking : IRanking
 
     public async UniTask SendScoreAsync(Record record)
     {
+        if (record.IsRecordNameNull())
+        {
+            record = record.GetEmptyNameInstance();
+        }
         await HttpService.PostAsync(
             Path.Combine(RankingServerUrl, "send_score"),
             new Dictionary<string, string>()

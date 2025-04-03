@@ -24,7 +24,19 @@ public class Record : IComparable<Record>, IEquatable<Record>
         Ulid ulid = Ulid.NewUlid();
         id = ulid.ToString();
         Score = score;
-        Name = name ?? string.Empty;
+        Name = name;
+    }
+    
+    public Record(string ulid, int score, string name = null)
+    {
+        id = ulid;
+        Score = score;
+        Name = name;
+    }
+
+    public Record GetEmptyNameInstance()
+    {
+        return new Record(id, Score, string.Empty);
     }
 
     public bool IsRecordNameNull()

@@ -21,25 +21,23 @@ public class RecordView : MonoBehaviour
         new Color32(46, 121, 56, 255)
     };
 
-    private static readonly int HighlightAnimationHash = Animator.StringToHash("Highlight"); 
-    
+    private static readonly int HighlightAnimationHash = Animator.StringToHash("Highlight");
+
     public void SetRecord(int rankIndex, Record record)
     {
         rankText.color = Colors[rankIndex];
         rankText.text = RankStr[rankIndex];
         if (record.IsRecordNameNull())
         {
-            nameText.text = string.Empty;
+            record = record.GetEmptyNameInstance();
+            
             UniTask.Void(async () =>
             {
                 await UniTask.WaitUntil(() => animator.isActiveAndEnabled);
                 animator.Play(HighlightAnimationHash);
             });
         }
-        else
-        {
-            nameText.text = record.Name;
-        }
+        nameText.text = record.Name;
         scoreText.text = $"{record.Score}<size=23.6>コ</size>";
     }
 }

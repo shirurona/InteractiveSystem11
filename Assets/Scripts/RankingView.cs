@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Cysharp.Threading.Tasks;
 using TMPro;
 using UnityEngine;
@@ -11,7 +12,8 @@ public class RankingView : MonoBehaviour
     [SerializeField] private GameObject nameRegisterCanvas;
     [SerializeField] private TMP_InputField nameInputField;
     [SerializeField] private Button nameDecideButton;
-    
+
+    private List<RecordView> _recordViews = new List<RecordView>();
     private UniTaskCompletionSource<string> _tcs = new UniTaskCompletionSource<string>();
     
     private void DecideName()
@@ -33,12 +35,24 @@ public class RankingView : MonoBehaviour
 
     public void ShowRanking(Record[] records)
     {
+        Debug.Log("show ranking");
+        ClearRanking();
         for (int i = 0; i < records.Length; i++)
         {
             RecordView recordView = Instantiate(recordPrefab, content);
+            _recordViews.Add(recordView);
             recordView.SetRecord(i, records[i]);
         }
     }
+
+    private void ClearRanking()
+    {
+        foreach (RecordView recordView in _recordViews)
+        {
+            Destroy(recordView.gameObject);
+        }
+        _recordViews.Clear();
+    } 
 
     public void SetInputFieldPosition(int rank)
     {

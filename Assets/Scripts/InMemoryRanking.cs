@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.IO;
 using Cysharp.Threading.Tasks;
 using SQLite;
 using UnityEngine;
@@ -40,15 +39,20 @@ public class InMemoryRanking : IRanking
     public async UniTask<bool> IsRankedInAsync(Record record)
     {
         await db.CreateTableAsync<Record>();
-        // 5位のスコアを取得
+        // 5位のスコアを取得 (Rankを取得したいのでNameを代わりに使う)
         Record minRankedScore = await db.FindWithQueryAsync<Record>($@"
-            SELECT MIN(score) AS score FROM (
-            SELECT {scoreColumn} FROM {tableName} 
-            WHERE {nameColumn} IS NOT NULL 
-            GROUP BY {nameColumn} 
-            ORDER BY {scoreColumn} DESC 
-            LIMIT {limit})
+            SELECT MIN(GroupMin), COUNT(*) AS Name 
+            FROM (
+                SELECT MAX({scoreColumn}) AS GroupMin FROM {tableName} 
+                WHERE {nameColumn} IS NOT NULL 
+                GROUP BY {nameColumn} 
+                ORDER BY GroupMin DESC 
+                LIMIT {limit})
             ");
-        return record.Score >= minRankedScore.Score;
+
+        int rankCount = int.Parse(minRankedScore.Name);
+        
+        // 登録件数5件未満の場合を考慮
+        return rankCount < 5 || minRankedScore.Score <= record.Score;
     }
 }

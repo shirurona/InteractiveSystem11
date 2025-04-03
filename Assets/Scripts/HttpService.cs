@@ -7,7 +7,7 @@ using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.Networking;
 
-public class HttpService : MonoBehaviour
+public class HttpService
 {
     /// <summary>
     /// サーバへGETリクエストを送信
@@ -63,5 +63,21 @@ public class HttpService : MonoBehaviour
         if (request.result == UnityWebRequest.Result.ProtocolError || request.result == UnityWebRequest.Result.ConnectionError) {
             throw new Exception($"通信に失敗しました。({request.error})");
         }
+    }
+    
+    /// <summary>
+    /// サーバへ接続できるか確認する
+    /// </summary>
+    /// <param name="url"></param>
+    /// <param name="timeOutSeconds"></param>
+    /// <param name="ct"></param>
+    /// <returns></returns>
+    public static async UniTask<bool> CheckConnectionAsync(string url, int timeOutSeconds, CancellationToken ct)
+    {
+        using var request = new UnityWebRequest(url) { timeout = timeOutSeconds };
+        var operation = request.SendWebRequest();
+        await UniTask.WaitUntil(() => operation.isDone, cancellationToken: ct);
+        // 404NotFoundだとProtocolErrorが出るので許す
+        return request.result == UnityWebRequest.Result.Success || request.result == UnityWebRequest.Result.ProtocolError;
     }
 }
