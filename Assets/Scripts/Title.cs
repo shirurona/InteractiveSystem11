@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using Cysharp.Threading.Tasks;
 using R3;
 using UnityEngine;
@@ -8,41 +9,53 @@ using UnityEngine.SceneManagement;
 public class Title : MonoBehaviour
 {
     [SerializeField] private GameObject overlayCanvas;
+    [SerializeField] private GameObject startButton;
     [SerializeField] private RankingView rankingView;
     [SerializeField] private RankingFactory rankingFactory;
     [SerializeField] private Animator animator;
-    [SerializeField] private Animator transitioAnimator;
+    [SerializeField] private Animator transitionAnimator;
     [SerializeField] private float rankingViewSeconds = 10;
     
     private static readonly int TextFadeAnimationHash = Animator.StringToHash("TextFade"); 
     private static readonly int TextReturnAnimationHash = Animator.StringToHash("TextReturn");
     private static readonly int BlackOutAnimationHash = Animator.StringToHash("BlackOut");
+
+    private IDisposable _rankingShowDisposable;
+    private IDisposable _rankingCloseDisposable;
+    private bool _isRankingButtonPressed = false;
+    private bool _once = false;
     
     private void Start()
     {
         AudioManager.Instance.PlayBGM("title");
-        Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds), TimeSpan.FromSeconds(rankingViewSeconds))
-            .Subscribe(_ => SceneSwitch())
-            .AddTo(this);
+        _rankingShowDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
+            .Subscribe(_ =>
+            {
+                _rankingCloseDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
+                    .Subscribe(_ => TitleScene());
+                RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
+            });
     }
 
-    private void SceneSwitch()
+    public void OnRankingButton()
     {
-        if (overlayCanvas.activeSelf)
+        if (_isRankingButtonPressed || overlayCanvas.activeSelf)
         {
             TitleScene();
         }
         else
         {
-            RankingScene().Forget();
+            RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
         }
+        _isRankingButtonPressed = !_isRankingButtonPressed;
     }
 
-    private async UniTaskVoid RankingScene()
+    private async UniTaskVoid RankingScene(CancellationToken ct)
     {
-        Debug.Log("ranking scene");
+        _rankingShowDisposable?.Dispose();
         animator.Play(TextFadeAnimationHash);
-        await UniTask.WaitForSeconds(1);
+        startButton.SetActive(false);
+        await UniTask.WaitForSeconds(1, cancellationToken: ct);
         overlayCanvas.SetActive(true);
         IRanking ranking = await rankingFactory.CreateRanking(this.GetCancellationTokenOnDestroy());
         List<Record> records = await ranking.GetRankingAsync();
@@ -51,15 +64,31 @@ public class Title : MonoBehaviour
 
     private void TitleScene()
     {
-        Debug.Log("title scene");
+        _rankingCloseDisposable?.Dispose();
         overlayCanvas.SetActive(false);
+        startButton.SetActive(true);
         animator.Play(TextReturnAnimationHash);
+        _rankingShowDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
+            .Subscribe(_ =>
+            {
+                _rankingCloseDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
+                    .Subscribe(_ => TitleScene());
+                RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
+            });
     }
 
     public void Game()
     {
+        if (_once)
+        {
+            return;
+        }
+        _once = true;
+        
         AudioManager.Instance.PlaySE("decide");
-        transitioAnimator.Play(BlackOutAnimationHash);
+        _rankingShowDisposable?.Dispose();
+        _rankingCloseDisposable?.Dispose();
+        transitionAnimator.Play(BlackOutAnimationHash);
         UniTask.Void(async () =>
         {
             await UniTask.WaitForSeconds(1);

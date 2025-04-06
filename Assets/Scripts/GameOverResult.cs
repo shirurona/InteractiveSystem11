@@ -34,9 +34,14 @@ public class GameOverResult : MonoBehaviour
         {
             List<Record> records = await ranking.GetRankingAsync();
             records.Add(record);
-            Record[] newRecords = records.OrderByDescending(x => x.Score).Take(5).ToArray();
+            foreach (var rec in records)
+            {
+                Debug.Log(rec.Score+" : "+rec.id);
+            }
+            Record[] newRecords = records.OrderByDescending(x => x.Score).ThenByDescending(x => x.id).Take(5).ToArray();
             rankingView.ShowRanking(newRecords);
             int newRecordIndex = Array.IndexOf(newRecords, record);
+            Debug.Log(newRecordIndex);
             rankingView.SetInputFieldPosition(newRecordIndex);
             string decideName = await rankingView.NameRegisterAsync();
             record = new Record(scoreModel.ScorePoint.CurrentValue, decideName);

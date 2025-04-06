@@ -41,7 +41,7 @@ public class InMemoryRanking : IRanking
         await db.CreateTableAsync<Record>();
         // 5位のスコアを取得 (Rankを取得したいのでNameを代わりに使う)
         Record minRankedScore = await db.FindWithQueryAsync<Record>($@"
-            SELECT MIN(GroupMin), COUNT(*) AS Name 
+            SELECT MIN(GroupMin) AS {scoreColumn}, COUNT(*) AS Name 
             FROM (
                 SELECT MAX({scoreColumn}) AS GroupMin FROM {tableName} 
                 WHERE {nameColumn} IS NOT NULL 
@@ -49,7 +49,8 @@ public class InMemoryRanking : IRanking
                 ORDER BY GroupMin DESC 
                 LIMIT {limit})
             ");
-
+        Debug.Log(minRankedScore.Score);
+        Debug.Log(minRankedScore.Name);
         int rankCount = int.Parse(minRankedScore.Name);
         
         // 登録件数5件未満の場合を考慮
