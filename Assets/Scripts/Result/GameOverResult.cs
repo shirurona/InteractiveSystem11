@@ -56,7 +56,7 @@ public class GameOverResult : MonoBehaviour
         UniTask.Void(async () =>
         {
             await UniTask.WaitForSeconds(1);
-            SceneManager.LoadScene("Demo");
+            SceneManager.LoadScene("Game");
         });
     }
 
