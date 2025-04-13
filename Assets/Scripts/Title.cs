@@ -14,27 +14,59 @@ public class Title : MonoBehaviour
     [SerializeField] private RankingFactory rankingFactory;
     [SerializeField] private Animator animator;
     [SerializeField] private Animator transitionAnimator;
+
+    [SerializeField] private GameObject leftHand;
+    [SerializeField] private GameObject rightHand;
+    
     [SerializeField] private float rankingViewSeconds = 10;
     
     private static readonly int TextFadeAnimationHash = Animator.StringToHash("TextFade"); 
     private static readonly int TextReturnAnimationHash = Animator.StringToHash("TextReturn");
     private static readonly int BlackOutAnimationHash = Animator.StringToHash("BlackOut");
-
-    private IDisposable _rankingShowDisposable;
-    private IDisposable _rankingCloseDisposable;
+    
     private bool _isRankingButtonPressed = false;
+    private bool _isRankingLoop = false;
     private bool _once = false;
     
     private void Start()
     {
         AudioManager.Instance.PlayBGM("title");
-        _rankingShowDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
-            .Subscribe(_ =>
-            {
-                _rankingCloseDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
-                    .Subscribe(_ => TitleScene());
-                RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
-            });
+        RankingLoop(this.GetCancellationTokenOnDestroy()).Forget();
+        Observable.EveryValueChanged(leftHand, x => x.activeSelf)
+            .Where(x => x)
+            .Where(_ => !_isRankingButtonPressed && overlayCanvas.activeSelf)
+            .Subscribe(_ => TitleScene())
+            .AddTo(this);
+        Observable.EveryValueChanged(rightHand, x => x.activeSelf)
+            .Where(x => x)
+            .Where(_ => !_isRankingButtonPressed && overlayCanvas.activeSelf)
+            .Subscribe(_ => TitleScene())
+            .AddTo(this);
+        
+        Observable.EveryValueChanged(leftHand, x => x.activeSelf)
+            .Where(x => !x)
+            .Where(_ => !rightHand.activeSelf)
+            .Subscribe(_ => RankingLoop(this.GetCancellationTokenOnDestroy()).Forget())
+            .AddTo(this);
+        Observable.EveryValueChanged(rightHand, x => x.activeSelf)
+            .Where(x => !x)
+            .Where(_ => !leftHand.activeSelf)
+            .Subscribe(_ => RankingLoop(this.GetCancellationTokenOnDestroy()).Forget())
+            .AddTo(this);
+    }
+    
+    private async UniTaskVoid RankingLoop(CancellationToken ct)
+    {
+        if (_isRankingLoop) return;
+        _isRankingLoop = true;
+        while (!leftHand.activeSelf && !rightHand.activeSelf)
+        {
+            TitleScene();
+            await UniTask.WaitForSeconds(rankingViewSeconds, cancellationToken: ct);
+            RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
+            await UniTask.WaitForSeconds(rankingViewSeconds, cancellationToken: ct);
+        }
+        _isRankingLoop = false;
     }
 
     public void OnRankingButton()
@@ -52,7 +84,6 @@ public class Title : MonoBehaviour
 
     private async UniTaskVoid RankingScene(CancellationToken ct)
     {
-        _rankingShowDisposable?.Dispose();
         animator.Play(TextFadeAnimationHash);
         startButton.SetActive(false);
         await UniTask.WaitForSeconds(1, cancellationToken: ct);
@@ -64,17 +95,9 @@ public class Title : MonoBehaviour
 
     private void TitleScene()
     {
-        _rankingCloseDisposable?.Dispose();
         overlayCanvas.SetActive(false);
         startButton.SetActive(true);
         animator.Play(TextReturnAnimationHash);
-        _rankingShowDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
-            .Subscribe(_ =>
-            {
-                _rankingCloseDisposable = Observable.Timer(TimeSpan.FromSeconds(rankingViewSeconds))
-                    .Subscribe(_ => TitleScene());
-                RankingScene(this.GetCancellationTokenOnDestroy()).Forget();
-            });
     }
 
     public void Game()
@@ -86,8 +109,6 @@ public class Title : MonoBehaviour
         _once = true;
         
         AudioManager.Instance.PlaySE("decide");
-        _rankingShowDisposable?.Dispose();
-        _rankingCloseDisposable?.Dispose();
         transitionAnimator.Play(BlackOutAnimationHash);
         UniTask.Void(async () =>
         {

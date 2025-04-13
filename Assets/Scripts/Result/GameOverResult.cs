@@ -13,7 +13,9 @@ public class GameOverResult : MonoBehaviour
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private RankingView rankingView;
     [SerializeField] private RankingFactory rankingFactory;
-    [SerializeField] private GameObject hands; 
+    
+    [SerializeField] private GameObject retryButton;
+    [SerializeField] private GameObject exitButton;
     
     private static readonly int BlackOutAnimationHash = Animator.StringToHash("BlackOut");
     
@@ -34,10 +36,6 @@ public class GameOverResult : MonoBehaviour
         {
             List<Record> records = await ranking.GetRankingAsync();
             records.Add(record);
-            foreach (var rec in records)
-            {
-                Debug.Log(rec.Score+" : "+rec.id);
-            }
             Record[] newRecords = records.OrderByDescending(x => x.Score).ThenByDescending(x => x.id).Take(5).ToArray();
             rankingView.ShowRanking(newRecords);
             int newRecordIndex = Array.IndexOf(newRecords, record);
@@ -47,7 +45,8 @@ public class GameOverResult : MonoBehaviour
             record = new Record(scoreModel.ScorePoint.CurrentValue, decideName);
         }
         ranking.SendScoreAsync(record);
-        hands.SetActive(true);
+        retryButton.SetActive(true);
+        exitButton.SetActive(true);
     }
     
     public void Retry()
